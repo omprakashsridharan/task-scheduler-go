@@ -22,7 +22,7 @@ func NewRedisStorage(redisConfig config.Redis, ctx context.Context) *RedisStorag
 	})
 
 	if err := client.Ping(ctx).Err(); err != nil {
-		log.Panicln("Error whole instantiating redis client")
+		log.Panicf("Error whole instantiating redis client: %s", err)
 	}
 	log.Println("Redis client instantiated")
 	return &RedisStorage{
