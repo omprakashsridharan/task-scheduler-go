@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"log"
 	"task-scheduler/config"
 	"time"
@@ -14,21 +15,25 @@ type RedisStorage struct {
 	ctx    context.Context
 }
 
-func NewRedisStorage(redisConfig config.Redis, ctx context.Context) *RedisStorage {
-	client := redis.NewClient(&redis.Options{
-		Addr:     redisConfig.Url,
-		Password: "",
-		DB:       0,
-	})
+var RedisInstantiationError = errors.New("error whole instantiating redis client")
+var RedisParseUrlError = errors.New("error whole parsing redis url")
+
+func NewRedisStorage(redisConfig config.Redis, ctx context.Context) (*RedisStorage, error) {
+	options, err := redis.ParseURL(redisConfig.URI)
+	if err != nil {
+		log.Println(err)
+		return nil, RedisParseUrlError
+	}
+	client := redis.NewClient(options)
 
 	if err := client.Ping(ctx).Err(); err != nil {
-		log.Panicf("Error whole instantiating redis client: %s", err)
+		return nil, RedisInstantiationError
 	}
 	log.Println("Redis client instantiated")
 	return &RedisStorage{
 		client: client,
 		ctx:    ctx,
-	}
+	}, nil
 }
 
 func (rs *RedisStorage) Set(key string, value string, expiration time.Duration) error {

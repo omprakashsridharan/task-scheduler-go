@@ -15,6 +15,6 @@ func main() {
 	}
 	log.Println("Config loaded")
 	ctx := context.Background()
-	_ = repository.NewRedisStorage(initConfig.Redis, ctx)
+	_, _ = repository.NewRedisStorage(initConfig.Redis, ctx)
 
 }

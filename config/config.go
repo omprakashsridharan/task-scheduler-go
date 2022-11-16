@@ -22,7 +22,7 @@ type Config struct {
 }
 
 type Redis struct {
-	Url string `config:"url" validate:"required"`
+	URI string `config:"uri" validate:"required"`
 }
 
 func InitConfig(envFilePath string, configFilePath string) (Config, error) {

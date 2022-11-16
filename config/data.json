@@ -1,5 +1,5 @@
 {
   "redis": {
-    "url": "postgres"
+    "uri": "postgres"
   }
 }
