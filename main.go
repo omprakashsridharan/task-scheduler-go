@@ -9,12 +9,12 @@ import (
 
 func main() {
 	log.Println("Task scheduler")
-	config, err := config.InitConfig(".env", "config/data.json")
+	initConfig, err := config.InitConfig(".env", "initConfig/data.json")
 	if err != nil {
-		log.Fatalf("Error while loading config %s", err)
+		log.Fatalf("Error while loading initConfig %s", err)
 	}
 	log.Println("Config loaded")
 	ctx := context.Background()
-	_ = repository.NewRedisStorage(config.Redis, ctx)
+	_ = repository.NewRedisStorage(initConfig.Redis, ctx)
 
 }
